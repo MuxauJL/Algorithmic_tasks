@@ -71,7 +71,6 @@ int convertToArabic(const string& romanNumber) {
     }
     int arabicNumber = 0;
     int numberOrder = 0;
-    int prevNumber = 10000;
     for (int i = 0; i < romanNumber.size();)
     {
         int counter = 1;
@@ -114,10 +113,6 @@ int convertToArabic(const string& romanNumber) {
                 }
             }
         }
-        if (prevNumber < currentNumber)
-        {
-            return -1;
-        }
         if (arabicNumber == 0)
         {
             numberOrder = int(log10(currentNumber));
@@ -127,7 +122,6 @@ int convertToArabic(const string& romanNumber) {
             return -1;
         }
         arabicNumber += currentNumber;
-        prevNumber = currentNumber;
     }
     return arabicNumber;
 }
