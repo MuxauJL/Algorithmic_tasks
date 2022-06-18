@@ -71,19 +71,8 @@ std::vector<PathVertex> findUpgoingPathLengthsFromVertex(int id, const vector<Ve
 
 void addPaths(const vector<PathVertex>& path, int x, set<pair<int, int>>& paths)
 {
-    if (path.empty())
+    if (path.empty() || x == 0)
     {
-        return;
-    }
-    if ((abs(x) == 1) || (x == 0))
-    {
-        for (const auto& v: path)
-        {
-            if (v.w == x)
-            {
-                paths.emplace(v.id, v.id);
-            }
-        }
         return;
     }
     int left = 0;
@@ -91,24 +80,27 @@ void addPaths(const vector<PathVertex>& path, int x, set<pair<int, int>>& paths)
     int length = path[left].w;
     while (right < path.size())
     {
-        if (length == x)
-        {
-            paths.emplace(path[left].id, path[right - 1].id);
-            length -= path[left++].w;
-        } 
-        else if (length < x)
+        if (length < x)
         {
             length += path[right++].w;
         }
         else
         {
+            if (length == x)
+            {
+                paths.emplace(path[left].id, path[right - 1].id);
+            }
             length -= path[left++].w;
         }
         right = max(right, left + 1);
     }
-    if (length == x)
+    while ((length >= x) && (left < path.size()))
     {
-        paths.emplace(path[left].id, path[right - 1].id);
+        if (length == x)
+        {
+            paths.emplace(path[left].id, path[right - 1].id);
+        }
+        length -= path[left++].w;
     }
 }
 
